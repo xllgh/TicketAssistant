@@ -16,7 +16,7 @@
 
         <variable
             name="adRecyclerAdapter"
-            type="com.yly.trainsystem.adapter.AdRecyclerAdapter" />
+            type="com.yly.trainsystem.ui.home.AdRecyclerAdapter" />
 
     </data>
 

@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.yly.trainsystem.ui.order.DashboardFragment"
+        android:name="com.yly.trainsystem.ui.order.OrderFragment"
         android:label="@string/title_order"
         tools:layout="@layout/fragment_order" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.yly.trainsystem.ui.my.NotificationsFragment"
+        android:name="com.yly.trainsystem.ui.my.MyFragment"
         android:label="@string/title_my"
         tools:layout="@layout/fragment_my" />
 </navigation>

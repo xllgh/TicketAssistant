@@ -6,7 +6,7 @@
     <data>
         <variable
             name="adViewModel"
-            type="com.yly.trainsystem.adapter.AdViewModel" />
+            type="com.yly.trainsystem.ui.home.AdViewModel" />
     </data>
 
     <ImageView
