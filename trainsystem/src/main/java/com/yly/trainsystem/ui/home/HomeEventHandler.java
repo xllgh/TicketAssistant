@@ -2,28 +2,21 @@ package com.yly.trainsystem.ui.home;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.DatePicker;
 
-import androidx.databinding.DataBindingUtil;
+import com.yly.trainsystem.ui.tickets.TicketsActivity;
 
-import com.yly.trainsystem.volley.HttpUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 public class HomeEventHandler {
 
-    public void onQueryClick(HomeViewModel homeViewModel) {
+    public void onQueryClick(HomeViewModel homeViewModel, Context context) {
         Log.e("HomeFragment", homeViewModel.departure.get()+ "");
         Log.e("HomeFragment", homeViewModel.departureTime.get()  + "");
         Log.e("HomeFragment", homeViewModel.destination.get() + "");
@@ -32,8 +25,15 @@ public class HomeEventHandler {
         map.put("departure", homeViewModel.departure.get());
         map.put("destination", homeViewModel.destination.get());
         map.put("departureTime", homeViewModel.departureTime.get());
-        HttpUtils.post(HttpUtils.QUERY_TICKET, map);
-
+        String orderId = homeViewModel.oldOrderId.get();
+        if (orderId != null && !TextUtils.isEmpty(orderId)) {
+            map.put("oldOrderId", orderId);
+        }
+        Intent intent = new Intent(context, TicketsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", map);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
     }
 
     public void onExchangeAddress(HomeViewModel homeViewModel) {

@@ -1,5 +1,6 @@
 package com.yly.trainsystem.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.yly.trainsystem.R;
 import com.yly.trainsystem.databinding.FragmentHomeBinding;
+import com.yly.trainsystem.ui.order.OrderInfo;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -23,6 +25,12 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
+       Intent intent = Objects.requireNonNull(getActivity()).getIntent();
+        if (intent != null) {
+            OrderInfo orderInfo = (OrderInfo) intent.getSerializableExtra("orderInfo");
+            if (orderInfo != null )
+            homeViewModel.oldOrderId.set(String.valueOf(orderInfo.getOrderId()));
+        }
 
         FragmentHomeBinding binding =  DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
 
@@ -34,9 +42,6 @@ public class HomeFragment extends Fragment {
         binding.setHandler(new HomeEventHandler());
         binding.setAdRecyclerAdapter(new AdRecyclerAdapter(list, Objects.requireNonNull(getActivity())));
         return binding.getRoot();
-
-
-
     }
 
 

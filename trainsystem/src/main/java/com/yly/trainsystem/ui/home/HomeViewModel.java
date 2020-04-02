@@ -18,7 +18,7 @@ public class HomeViewModel extends ViewModel {
 
     public final ObservableField<String>  departureTime = new ObservableField<>();
 
-
+    public final ObservableField<String> oldOrderId = new ObservableField<>();
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();

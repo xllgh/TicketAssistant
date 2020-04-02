@@ -10,12 +10,16 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.android.volley.Response;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 import com.yly.trainsystem.R;
 import com.yly.trainsystem.databinding.FragmentOrderBinding;
 import com.yly.trainsystem.volley.HttpUtils;
+import com.yly.trainsystem.volley.ServerOrderResponse;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -24,37 +28,47 @@ public class OrderFragment extends Fragment {
 
     private OrderViewModel orderViewModel;
 
+    private FragmentOrderBinding binding;
 
+    private Response.Listener<String> listener = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+
+            if (response != null) {
+                Gson gson = new Gson();
+                ServerOrderResponse orderResponse = gson.fromJson(response, ServerOrderResponse.class);
+                List<OrderInfo> orderInfos = orderResponse.getData();
+                List<OrderInfo> futureOrder = new ArrayList<>();
+                List<OrderInfo> historyOrder = new ArrayList<>();
+
+                for (OrderInfo orderInfo: orderInfos) {
+                   int result =  orderInfo.getDepartureTime().compareTo(new Date());
+                   if (result <= 0) {
+                       historyOrder.add(orderInfo);
+                   } else {
+                       futureOrder.add(orderInfo);
+                   }
+                }
+
+                List<OrderListFragment> list = new ArrayList<>();
+                list.add(new OrderListFragment(futureOrder));
+                list.add(new OrderListFragment(historyOrder, true));
+                final OrderAdapter orderAdapter = new OrderAdapter(Objects.requireNonNull(getActivity()), list);
+                binding.setOrderAdapter(orderAdapter);
+            }
+
+        }
+    };
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         orderViewModel =
                 ViewModelProviders.of(this).get(OrderViewModel.class);
-        FragmentOrderBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_order, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_order, container, false);
         binding.setOrderViewModel(orderViewModel);
         HashMap<String, String> map = new HashMap<>();
         map.put("userId", "1");
-        HttpUtils.post(HttpUtils.QUERY_USER_TICKET, map);
-
-        List<OrderListFragment> list = new ArrayList<>();
-        List<OrderItem> orderItems1 = new ArrayList<>();
-        orderItems1.add(new OrderItem("G101", "2020-3-14"));
-        orderItems1.add(new OrderItem("G101", "2020-3-14"));
-        orderItems1.add(new OrderItem("G101", "2020-3-14"));
-        orderItems1.add(new OrderItem("G101", "2020-3-14"));
-        orderItems1.add(new OrderItem("G101", "2020-3-14"));
-        orderItems1.add(new OrderItem("G101", "2020-3-14"));
-
-        List<OrderItem> orderItems2 = new ArrayList<>();
-        orderItems2.add(new OrderItem("G19098", "2020-3-14"));
-        orderItems2.add(new OrderItem("G19098", "2020-3-14"));
-        orderItems2.add(new OrderItem("G101", "2020-3-14"));
-
-
-        list.add(new OrderListFragment(orderItems1));
-        list.add(new OrderListFragment(orderItems2));
-        final OrderAdapter orderAdapter = new OrderAdapter(Objects.requireNonNull(getActivity()), list);
-        binding.setOrderAdapter(orderAdapter);
+        HttpUtils.post(HttpUtils.QUERY_USER_TICKET, map, listener, null);
 
         TabLayout.OnTabSelectedListener tabSelectedListener = new TabLayout.OnTabSelectedListener() {
             @Override

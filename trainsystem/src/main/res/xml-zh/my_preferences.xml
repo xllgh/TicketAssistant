@@ -1,35 +1,24 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
-
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
-
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
-
+    <PreferenceCategory app:title="@string/pre_personal">
+        <Preference app:title="@string/prefer_login"
+            app:key="@string/key_login"
+            />
+        <Preference app:title="@string/prefer_auth"/>
+        <Preference app:title="@string/prefer_phone_auth"/>
+        <Preference app:title="@string/prefer_sercurity"/>
+        <Preference app:title="@string/prefer_food"/>
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
+    <PreferenceCategory>
+        <Preference app:title="@string/prefer_guide"/>
+        <Preference app:title="@string/prefer_service"/>
+        <Preference app:title="@string/prefer_info"/>
+    </PreferenceCategory>
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
-
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
-
+    <PreferenceCategory>
+        <Preference app:title="@string/prefer_notification"/>
+        <Preference app:title="@string/prefer_aboubt"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
